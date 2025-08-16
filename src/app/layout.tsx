@@ -2,8 +2,6 @@ import { FC } from "react";
 import type { Metadata } from "next";
 import { Inter, Fira_Code } from "next/font/google";
 import { RootLayoutProps } from "@/interfaces/RootLayoutProps";
-import Navbar from "@/components/shared/Navbar";
-import Footer from "@/components/shared/Footer";
 
 import "@/styles/globals.css";
 
@@ -28,11 +26,7 @@ const RootLayout: FC<Readonly<RootLayoutProps>> = ({ children }) => {
       <body
         className={`${interSans.variable} ${firaCode.variable} antialiased`}
       >
-        <main>
-          <Navbar />
-          {children}
-          <Footer />
-        </main>
+        {children}
       </body>
     </html>
   );
