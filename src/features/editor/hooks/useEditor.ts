@@ -82,6 +82,96 @@ const buildEditor = ({
 
       addToCanvas(object);
     },
+    changeOpacity: (value: number) => {
+      canvas.getActiveObjects().forEach((object) => {
+        object.set({ opacity: value });
+      });
+      canvas.renderAll();
+    },
+    getActiveOpacity: () => {
+      const selectedObject = selectedObjects[0];
+
+      if (!selectedObject) {
+        return 1;
+      }
+
+      const value = selectedObject.get("opacity") || 1;
+      return value as number;
+    },
+    // changeFontWeight: (value: number) => {
+    //   canvas.getActiveObjects().forEach((object) => {
+    //     if (isTextType(object.type)) {
+    //       object.set({ fontWeight: value });
+    //     }
+    //   });
+    //   canvas.renderAll();
+    // },
+    // changeFontStyle: (value: string) => {
+    //   canvas.getActiveObjects().forEach((object) => {
+    //     if (isTextType(object.type)) {
+    //       object.set({ fontStyle: value });
+    //     }
+    //   });
+    //   canvas.renderAll();
+    // },
+    // changeFontLineThrough: (value: boolean) => {
+    //   canvas.getActiveObjects().forEach((object) => {
+    //     if (isTextType(object.type)) {
+    //       object.set({ linethrough: value });
+    //     }
+    //   });
+    //   canvas.renderAll();
+    // },
+    // changeFontUnderline: (value: boolean) => {
+    //   canvas.getActiveObjects().forEach((object) => {
+    //     if (isTextType(object.type)) {
+    //       object.set({ underline: value });
+    //     }
+    //   });
+    //   canvas.renderAll();
+    // },
+    // changeTextAlign: (value: ITextboxOptions["textAlign"]) => {
+    //   canvas.getActiveObjects().forEach((object) => {
+    //     if (isTextType(object.type)) {
+    //       object.set({ textAlign: value });
+    //     }
+    //   });
+    //   canvas.renderAll();
+    // },
+    // changeFontSize: (value: number) => {
+    //   canvas.getActiveObjects().forEach((object) => {
+    //     if (isTextType(object.type)) {
+    //       object.set({ fontSize: value });
+    //     }
+    //   });
+    //   canvas.renderAll();
+    // },
+    // bringForward: () => {
+    //   canvas.getActiveObjects().forEach((object) => {
+    //     canvas.bringObjectForward(object);
+    //     canvas.renderAll();
+    //     // TODO: get the image instead of the workspace
+    //     // const workspace = getWorkSpace();
+    //     // canvas.sendObjectToBack(workspace!);
+    //   });
+    // },
+    // sendBackward: () => {
+    //   canvas.getActiveObjects().forEach((object) => {
+    //     canvas.sendObjectBackwards(object);
+    //     canvas.renderAll();
+    //     // TODO: get the image instead of the workspace
+    //     // const workspace = getWorkSpace();
+    //     // canvas.sendObjectToBack(workspace!);
+    //   });
+    // },
+    // changeFillColor: (value: string) => {
+    //   setFillColor(value);
+    //   canvas.getActiveObjects().forEach((object) => {
+    //     object.set({ fill: value });
+    //   });
+
+    //   canvas.renderAll();
+    // },
   };
 };
 
