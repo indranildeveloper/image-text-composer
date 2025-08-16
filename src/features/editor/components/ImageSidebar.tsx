@@ -31,6 +31,11 @@ const ImageSidebar: FC<ImageSidebarProps> = ({
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
+    if (acceptedFiles[0].type !== "image/png") {
+      // TODO: add toast
+      return;
+    }
+
     setUploadedFile(acceptedFiles[0]);
   }, []);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });

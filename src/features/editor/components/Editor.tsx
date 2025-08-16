@@ -9,13 +9,22 @@ import ImageSidebar from "./ImageSidebar";
 import TextSidebar from "./TextSidebar";
 import { TActiveTool } from "../types/editor";
 import { useEditor } from "../hooks/useEditor";
+import { SELECTION_DEPENDENT_TOOLS } from "../constants/tools";
 
 const Editor: FC = () => {
   const [activeTool, setActiveTool] = useState<TActiveTool>("image");
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const { init, editor } = useEditor();
+  const handleClearSelection = useCallback(() => {
+    if (SELECTION_DEPENDENT_TOOLS.includes(activeTool)) {
+      setActiveTool("select");
+    }
+  }, [activeTool]);
+
+  const { init, editor } = useEditor({
+    clearSelectionCallback: handleClearSelection,
+  });
 
   useEffect(() => {
     const canvas = new fabric.Canvas(canvasRef.current!, {
@@ -45,7 +54,11 @@ const Editor: FC = () => {
 
   return (
     <div className="flex h-screen flex-col">
-      <EditorNavbar />
+      <EditorNavbar
+        editor={editor}
+        activeTool={activeTool}
+        onChangeActiveTool={handleChangeActiveTool}
+      />
       <div className="flex h-[calc(100vh-70px)]">
         <EditorSidebar
           activeTool={activeTool}
@@ -57,11 +70,17 @@ const Editor: FC = () => {
           onChangeActiveTool={handleChangeActiveTool}
         />
         <TextSidebar
+          editor={editor}
           activeTool={activeTool}
           onChangeActiveTool={handleChangeActiveTool}
         />
         <main className="w-full">
-          <EditorToolbar />
+          <EditorToolbar
+            key={JSON.stringify(editor?.canvas?.getActiveObject())}
+            editor={editor}
+            activeTool={activeTool}
+            onChangeActiveTool={handleChangeActiveTool}
+          />
           <div ref={containerRef} className="h-[calc(100vh-120px)] flex-1">
             <canvas ref={canvasRef} />
           </div>
