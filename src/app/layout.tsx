@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { Inter, Fira_Code } from "next/font/google";
 import { RootLayoutProps } from "@/interfaces/RootLayoutProps";
 
-import "./globals.css";
+import "@/styles/globals.css";
 
 const interSans = Inter({
   variable: "--font-inter-sans",
