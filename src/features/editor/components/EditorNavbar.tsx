@@ -28,12 +28,14 @@ interface EditorNavbarProps {
   editor: Editor | undefined;
   activeTool: TActiveTool;
   onChangeActiveTool: (tool: TActiveTool) => void;
+  onResetEditor: () => void;
 }
 
 const EditorNavbar: FC<EditorNavbarProps> = ({
   editor,
   activeTool,
   onChangeActiveTool,
+  onResetEditor,
 }) => {
   return (
     <nav className="flex h-[70px] items-center justify-between border-b px-8">
@@ -74,7 +76,11 @@ const EditorNavbar: FC<EditorNavbarProps> = ({
           </Button>
         </Hint>
       </div>
-      <div>
+
+      <div className="flex items-center justify-center gap-2">
+        <div>
+          <Button onClick={onResetEditor}>Reset Editor</Button>
+        </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">

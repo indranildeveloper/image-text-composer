@@ -6,6 +6,7 @@ export const FONT_STYLE = "normal";
 export const FONT_LINE_THROUGH = false;
 export const FONT_UNDERLINE = false;
 export const TEXT_ALIGN = "left";
+export const DEFAULT_EDITOR_STATE = `{"version":"6.7.1","objects":[]}`;
 
 export const TEXT_OPTIONS = {
   left: 100,

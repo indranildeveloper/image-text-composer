@@ -52,7 +52,6 @@ export const useCanvasEvents = ({
           strokeDashArray: [4, 4],
         });
         canvas.add(snapLineV);
-        canvas.sendObjectToBack(snapLineV);
       } else {
         snapLineV.set({
           visible: true,
@@ -82,7 +81,6 @@ export const useCanvasEvents = ({
           strokeDashArray: [4, 4],
         });
         canvas.add(snapLineH);
-        canvas.sendObjectToBack(snapLineH);
       } else {
         snapLineH.set({
           visible: true,

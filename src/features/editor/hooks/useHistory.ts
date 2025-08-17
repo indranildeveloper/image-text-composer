@@ -31,7 +31,7 @@ export const useHistory = ({ canvas }: UseHistoryProps) => {
         setHistoryIndex(canvasHistory.current.length - 1);
       }
 
-      // TODO: save callback
+      localStorage.setItem("canvasHistory", JSON.stringify(json, null, 2));
     },
     [canvas],
   );

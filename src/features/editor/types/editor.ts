@@ -40,4 +40,6 @@ export interface Editor {
   pasteObject: () => void;
   changeFontFamily: (value: string) => void;
   getActiveFontFamily: () => string;
+  loadJSON: (json: string) => void;
+  resetEditor: () => void;
 }

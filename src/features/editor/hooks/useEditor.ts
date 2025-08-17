@@ -3,6 +3,7 @@ import * as fabric from "fabric";
 import { Editor } from "../types/editor";
 import { ITextboxOptions } from "fabric/fabric-impl";
 import {
+  DEFAULT_EDITOR_STATE,
   FILL_COLOR,
   FONT_FAMILY,
   FONT_LINE_THROUGH,
@@ -88,6 +89,17 @@ const buildEditor = ({
     downloadFile(dataUrl, "png");
   };
 
+  const loadJSON = (json: string) => {
+    const data: string | Record<string, unknown> = JSON.parse(json);
+    console.log(data);
+    canvas
+      .loadFromJSON(data)
+      .then(() => canvas.renderAll())
+      .catch((error) => {
+        console.error("Something went wrong while loading the file!", error);
+      });
+  };
+
   return {
     canvas,
     selectedObjects,
@@ -98,6 +110,20 @@ const buildEditor = ({
     savePNG: () => savePNG(),
     copyObject: () => copy(),
     pasteObject: () => paste(),
+    resetEditor: () => {
+      canvas
+        ?.loadFromJSON(JSON.parse(DEFAULT_EDITOR_STATE) as string)
+        .then(() => {
+          canvas.renderAll();
+        })
+        .catch((error) => {
+          console.error(
+            "Something went wrong while resetting the editor!",
+            error,
+          );
+        });
+    },
+    loadJSON: (json: string) => loadJSON(json),
     addImage: (value: string) => {
       fabric.FabricImage.fromURL(value, { crossOrigin: "anonymous" })
         .then((image) => {

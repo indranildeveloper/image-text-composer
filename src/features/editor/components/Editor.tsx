@@ -1,6 +1,7 @@
 "use client";
 
 import { FC, useCallback, useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import * as fabric from "fabric";
 import EditorNavbar from "./EditorNavbar";
 import EditorSidebar from "./EditorSidebar";
@@ -13,8 +14,10 @@ import { SELECTION_DEPENDENT_TOOLS } from "../constants/tools";
 import OpacitySidebar from "./OpacitySidebar";
 import FillColorSidebar from "./FillColorSidebar";
 import FontFamilySidebar from "./FontFamilySidebar";
+import { DEFAULT_EDITOR_STATE } from "../constants/editor";
 
 const Editor: FC = () => {
+  const router = useRouter();
   const [activeTool, setActiveTool] = useState<TActiveTool>("image");
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -34,6 +37,18 @@ const Editor: FC = () => {
       controlsAboveOverlay: true,
       preserveObjectStacking: true,
     });
+
+    const prevData =
+      localStorage.getItem("canvasHistory") ?? DEFAULT_EDITOR_STATE;
+
+    canvas
+      .loadFromJSON(JSON.parse(prevData) as string)
+      .then(() => {
+        canvas.renderAll();
+      })
+      .catch((error) => {
+        console.error("Something went wrong while loading the file!", error);
+      });
 
     init({ initialCanvas: canvas, initialContainer: containerRef.current! });
 
@@ -55,12 +70,19 @@ const Editor: FC = () => {
     [activeTool],
   );
 
+  const handleResetEditorState = () => {
+    localStorage.setItem("canvasHistory", JSON.stringify(DEFAULT_EDITOR_STATE));
+    router.refresh();
+    editor?.resetEditor();
+  };
+
   return (
     <div className="flex h-screen flex-col">
       <EditorNavbar
         editor={editor}
         activeTool={activeTool}
         onChangeActiveTool={handleChangeActiveTool}
+        onResetEditor={handleResetEditorState}
       />
       <div className="flex h-[calc(100vh-70px)]">
         <EditorSidebar
