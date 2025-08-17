@@ -72,7 +72,7 @@ const buildEditor = ({
     canvas.setActiveObject(object);
   };
 
-  function getBoundingRectangle(canvas: fabric.Canvas) {
+  const getBoundingRectangle = (canvas: fabric.Canvas) => {
     let minX = Infinity,
       minY = Infinity,
       maxX = -Infinity,
@@ -91,7 +91,7 @@ const buildEditor = ({
       width: maxX - minX,
       height: maxY - minY,
     };
-  }
+  };
 
   const savePNG = () => {
     const workspace = getWorkSpace() as fabric.FabricImage;
