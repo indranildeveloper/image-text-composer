@@ -17,6 +17,9 @@ import { JSON_KEYS } from "../constants/history";
 import { useCanvasEvents } from "./useCanvasEvents";
 import { isTextType } from "../utils/text";
 import { downloadFile } from "../utils/download";
+import { useClipboard } from "./useClipboard";
+import { useShortcuts } from "./useShortcuts";
+import { useWindowEvents } from "./useWindowEvents";
 
 interface UseEditorProps {
   clearSelectionCallback?: () => void;
@@ -32,6 +35,8 @@ interface BuildEditorProps {
   redo: () => void;
   fillColor: string;
   setFillColor: (value: string) => void;
+  copy: () => void;
+  paste: () => void;
 }
 
 const buildEditor = ({
@@ -44,6 +49,8 @@ const buildEditor = ({
   redo,
   fillColor,
   setFillColor,
+  copy,
+  paste,
 }: BuildEditorProps): Editor => {
   const getWorkSpace = () => {
     return (
@@ -84,6 +91,8 @@ const buildEditor = ({
     canUndo: () => canUndo(),
     canRedo: () => canRedo(),
     savePNG: () => savePNG(),
+    copyObject: () => copy(),
+    pasteObject: () => paste(),
     addImage: (value: string) => {
       fabric.FabricImage.fromURL(value, { crossOrigin: "anonymous" })
         .then((image) => {
@@ -303,6 +312,19 @@ export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
 
   useCanvasEvents({ canvas, setSelectedObjects, clearSelectionCallback, save });
 
+  const { copy, paste } = useClipboard({ canvas });
+
+  useShortcuts({
+    canvas,
+    undo,
+    redo,
+    save,
+    copy,
+    paste,
+  });
+
+  useWindowEvents();
+
   const editor = useMemo(() => {
     if (canvas) {
       return buildEditor({
@@ -315,6 +337,8 @@ export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
         redo,
         fillColor,
         setFillColor,
+        copy,
+        paste,
       });
     }
 
@@ -329,6 +353,8 @@ export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
     redo,
     fillColor,
     setFillColor,
+    copy,
+    paste,
   ]);
 
   const init = useCallback(

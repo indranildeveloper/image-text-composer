@@ -30,4 +30,6 @@ export interface Editor {
   bringForward: () => void;
   sendBackward: () => void;
   savePNG: () => void;
+  copyObject: () => void;
+  pasteObject: () => void;
 }

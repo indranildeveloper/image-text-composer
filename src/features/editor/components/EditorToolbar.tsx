@@ -14,6 +14,7 @@ import {
   AlignRightIcon,
   ArrowDownIcon,
   ArrowUpIcon,
+  CopyIcon,
 } from "lucide-react";
 import FontSizeInput from "./FontSizeInput";
 
@@ -271,6 +272,20 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
               value={properties.fontSize}
               onChange={handleChangeFontSize}
             />
+          </div>
+          <div className="flex h-full items-center justify-center">
+            <Hint label="Duplicate" side="bottom">
+              <Button
+                onClick={() => {
+                  editor?.copyObject();
+                  editor?.pasteObject();
+                }}
+                size="icon"
+                variant="ghost"
+              >
+                <CopyIcon className="size-4" />
+              </Button>
+            </Hint>
           </div>
         </div>
       )}
