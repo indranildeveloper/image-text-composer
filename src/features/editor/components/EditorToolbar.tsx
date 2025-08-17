@@ -4,7 +4,7 @@ import Hint from "./Hint";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { RxTransparencyGrid } from "react-icons/rx";
-import { FaBold, FaItalic, FaUnderline } from "react-icons/fa";
+import { FaBold, FaItalic, FaStrikethrough, FaUnderline } from "react-icons/fa";
 import { isTextType } from "../utils/text";
 import { FONT_WEIGHT } from "../constants/editor";
 
@@ -28,12 +28,14 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
   const initialFontWeight = editor?.getActiveFontWeight() ?? FONT_WEIGHT;
   const initialFontStyle = editor?.getActiveFontStyle();
   const initialFontUnderline = editor?.getActiveFontUnderline();
+  const initialFontLineThrough = editor?.getActiveFontLineThrough();
 
   const [properties, setProperties] = useState({
     fillColor: initialFillColor,
     fontWeight: initialFontWeight,
     fontStyle: initialFontStyle,
     fontUnderline: initialFontUnderline,
+    fontLineThrough: initialFontLineThrough,
   });
 
   const toggleBold = () => {
@@ -70,6 +72,18 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
     setProperties((prevProperties) => ({
       ...prevProperties,
       fontUnderline: newValue,
+    }));
+  };
+
+  const toggleLineThrough = () => {
+    if (!selectedObject) return;
+
+    const newValue = properties.fontLineThrough ? false : true;
+
+    editor?.changeFontLineThrough(newValue);
+    setProperties((prevProperties) => ({
+      ...prevProperties,
+      fontLineThrough: newValue,
     }));
   };
 
@@ -141,6 +155,18 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
                 className={cn(properties.fontUnderline && "bg-slate-100")}
               >
                 <FaUnderline className="size-4" />
+              </Button>
+            </Hint>
+          </div>
+          <div className="flex h-full items-center justify-center">
+            <Hint label="Strike" side="bottom">
+              <Button
+                onClick={toggleLineThrough}
+                size="icon"
+                variant="ghost"
+                className={cn(properties.fontLineThrough && "bg-slate-100")}
+              >
+                <FaStrikethrough className="size-4" />
               </Button>
             </Hint>
           </div>

@@ -4,6 +4,7 @@ import { Editor } from "../types/editor";
 import { ITextboxOptions } from "fabric/fabric-impl";
 import {
   FILL_COLOR,
+  FONT_LINE_THROUGH,
   FONT_STYLE,
   FONT_UNDERLINE,
   FONT_WEIGHT,
@@ -181,6 +182,24 @@ const buildEditor = ({
       }
 
       const value = selectedObject.get("underline") || FONT_UNDERLINE;
+      return value as boolean;
+    },
+    changeFontLineThrough: (value: boolean) => {
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextType(object.type)) {
+          object.set({ linethrough: value });
+        }
+      });
+      canvas.renderAll();
+    },
+    getActiveFontLineThrough: () => {
+      const selectedObject = selectedObjects[0];
+
+      if (!selectedObject) {
+        return FONT_LINE_THROUGH;
+      }
+
+      const value = selectedObject.get("linethrough") || FONT_LINE_THROUGH;
       return value as boolean;
     },
   };

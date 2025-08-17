@@ -21,4 +21,6 @@ export interface Editor {
   getActiveFontStyle: () => string;
   changeFontUnderline: (value: boolean) => void;
   getActiveFontUnderline: () => boolean;
+  changeFontLineThrough: (value: boolean) => void;
+  getActiveFontLineThrough: () => boolean;
 }
