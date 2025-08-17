@@ -2,6 +2,7 @@ import { FC } from "react";
 import type { Metadata } from "next";
 import { Inter, Fira_Code } from "next/font/google";
 import { RootLayoutProps } from "@/interfaces/RootLayoutProps";
+import { Toaster } from "@/components/ui/sonner";
 
 import "@/styles/globals.css";
 
@@ -27,6 +28,7 @@ const RootLayout: FC<Readonly<RootLayoutProps>> = ({ children }) => {
         className={`${interSans.variable} ${firaCode.variable} antialiased`}
       >
         {children}
+        <Toaster theme="light" richColors />
       </body>
     </html>
   );

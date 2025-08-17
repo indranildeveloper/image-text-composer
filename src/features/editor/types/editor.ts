@@ -42,4 +42,5 @@ export interface Editor {
   getActiveFontFamily: () => string;
   loadJSON: (json: string) => void;
   resetEditor: () => void;
+  deleteObject: () => void;
 }

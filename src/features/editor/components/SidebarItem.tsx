@@ -20,7 +20,7 @@ const SidebarItem: FC<SidebarItemProps> = ({
   return (
     <button
       className={cn(
-        "hover:text-primary flex aspect-video flex-col items-center justify-center gap-1 rounded-md p-3 text-slate-700 transition hover:bg-slate-100",
+        "hover:text-primary flex aspect-video flex-col items-center justify-center gap-1 rounded-md p-3 text-slate-700 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-400",
         isActive && "text-primary bg-slate-100",
       )}
       onClick={onClick}

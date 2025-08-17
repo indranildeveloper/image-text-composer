@@ -2,6 +2,7 @@ import { FC, useCallback, useState } from "react";
 import ToolSidebarHeader from "./ToolSidebarHeader";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { useDropzone } from "react-dropzone";
 import { FileUpIcon } from "lucide-react";
 import {
   Dialog,
@@ -15,7 +16,7 @@ import {
 } from "@/components/ui/dialog";
 import { Editor, TActiveTool } from "../types/editor";
 import ToolSidebarClose from "./ToolSidebarClose";
-import { useDropzone } from "react-dropzone";
+import { toast } from "sonner";
 
 export interface ImageSidebarProps {
   editor: Editor | undefined;
@@ -32,12 +33,12 @@ const ImageSidebar: FC<ImageSidebarProps> = ({
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles[0].type !== "image/png") {
-      // TODO: add toast
+      toast.error("Only PNG files are allowed!");
       return;
     }
-
     setUploadedFile(acceptedFiles[0]);
   }, []);
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   const handleImageUpload = () => {
@@ -105,7 +106,11 @@ const ImageSidebar: FC<ImageSidebarProps> = ({
             </div>
             <DialogFooter>
               <DialogClose asChild>
-                <Button type="button" onClick={() => handleImageUpload()}>
+                <Button
+                  type="button"
+                  disabled={!uploadedFile}
+                  onClick={() => handleImageUpload()}
+                >
                   Upload
                 </Button>
               </DialogClose>

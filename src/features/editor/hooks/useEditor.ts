@@ -347,6 +347,13 @@ const buildEditor = ({
         canvas.sendObjectToBack(workspace!);
       });
     },
+    deleteObject: () => {
+      canvas.getActiveObjects().forEach((object) => {
+        canvas.remove(object);
+      });
+      canvas.discardActiveObject();
+      canvas.renderAll();
+    },
   };
 };
 

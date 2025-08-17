@@ -16,6 +16,7 @@ import {
   ArrowUpIcon,
   ChevronDownIcon,
   CopyIcon,
+  TrashIcon,
 } from "lucide-react";
 import FontSizeInput from "./FontSizeInput";
 
@@ -304,6 +305,17 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
                 variant="ghost"
               >
                 <CopyIcon className="size-4" />
+              </Button>
+            </Hint>
+          </div>
+          <div className="flex h-full items-center justify-center">
+            <Hint label="Delete" side="bottom">
+              <Button
+                onClick={() => editor?.deleteObject()}
+                size="icon"
+                variant="ghost"
+              >
+                <TrashIcon className="size-4" />
               </Button>
             </Hint>
           </div>
