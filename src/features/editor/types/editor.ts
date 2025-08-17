@@ -1,6 +1,6 @@
 import * as fabric from "fabric";
 import { ITextboxOptions } from "fabric/fabric-impl";
-export type TActiveTool = "image" | "text" | "select" | "opacity";
+export type TActiveTool = "image" | "text" | "select" | "opacity" | "fill";
 
 export interface Editor {
   canvas: fabric.Canvas;
@@ -13,4 +13,6 @@ export interface Editor {
   selectedObjects: fabric.FabricObject[];
   changeOpacity: (value: number) => void;
   getActiveOpacity: () => number;
+  changeFillColor: (value: string) => void;
+  getActiveFillColor: () => string;
 }

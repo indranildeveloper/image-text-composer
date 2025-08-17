@@ -2,10 +2,11 @@ import { useCallback, useMemo, useState } from "react";
 import * as fabric from "fabric";
 import { Editor } from "../types/editor";
 import { ITextboxOptions } from "fabric/fabric-impl";
-import { TEXT_OPTIONS } from "../constants/editor";
+import { FILL_COLOR, TEXT_OPTIONS } from "../constants/editor";
 import { useHistory } from "./useHistory";
 import { JSON_KEYS } from "../constants/history";
 import { useCanvasEvents } from "./useCanvasEvents";
+import { isTextType } from "../utils/text";
 
 interface UseEditorProps {
   clearSelectionCallback?: () => void;
@@ -19,6 +20,8 @@ interface BuildEditorProps {
   canRedo: () => boolean;
   undo: () => void;
   redo: () => void;
+  fillColor: string;
+  setFillColor: (value: string) => void;
 }
 
 const buildEditor = ({
@@ -29,6 +32,8 @@ const buildEditor = ({
   canRedo,
   undo,
   redo,
+  fillColor,
+  setFillColor,
 }: BuildEditorProps): Editor => {
   const addToCanvas = (object: fabric.FabricObject) => {
     canvas.add(object);
@@ -74,9 +79,10 @@ const buildEditor = ({
         });
     },
     addText: (value: string, options?: ITextboxOptions) => {
-      // @ts-expect-error this code works, types are not properly working here
       const object = new fabric.Textbox(value, {
         ...TEXT_OPTIONS,
+        // @ts-expect-error fill color is a string
+        fill: fillColor,
         ...options,
       });
 
@@ -98,80 +104,25 @@ const buildEditor = ({
       const value = selectedObject.get("opacity") || 1;
       return value as number;
     },
-    // changeFontWeight: (value: number) => {
-    //   canvas.getActiveObjects().forEach((object) => {
-    //     if (isTextType(object.type)) {
-    //       object.set({ fontWeight: value });
-    //     }
-    //   });
-    //   canvas.renderAll();
-    // },
-    // changeFontStyle: (value: string) => {
-    //   canvas.getActiveObjects().forEach((object) => {
-    //     if (isTextType(object.type)) {
-    //       object.set({ fontStyle: value });
-    //     }
-    //   });
-    //   canvas.renderAll();
-    // },
-    // changeFontLineThrough: (value: boolean) => {
-    //   canvas.getActiveObjects().forEach((object) => {
-    //     if (isTextType(object.type)) {
-    //       object.set({ linethrough: value });
-    //     }
-    //   });
-    //   canvas.renderAll();
-    // },
-    // changeFontUnderline: (value: boolean) => {
-    //   canvas.getActiveObjects().forEach((object) => {
-    //     if (isTextType(object.type)) {
-    //       object.set({ underline: value });
-    //     }
-    //   });
-    //   canvas.renderAll();
-    // },
-    // changeTextAlign: (value: ITextboxOptions["textAlign"]) => {
-    //   canvas.getActiveObjects().forEach((object) => {
-    //     if (isTextType(object.type)) {
-    //       object.set({ textAlign: value });
-    //     }
-    //   });
-    //   canvas.renderAll();
-    // },
-    // changeFontSize: (value: number) => {
-    //   canvas.getActiveObjects().forEach((object) => {
-    //     if (isTextType(object.type)) {
-    //       object.set({ fontSize: value });
-    //     }
-    //   });
-    //   canvas.renderAll();
-    // },
-    // bringForward: () => {
-    //   canvas.getActiveObjects().forEach((object) => {
-    //     canvas.bringObjectForward(object);
-    //     canvas.renderAll();
-    //     // TODO: get the image instead of the workspace
-    //     // const workspace = getWorkSpace();
-    //     // canvas.sendObjectToBack(workspace!);
-    //   });
-    // },
-    // sendBackward: () => {
-    //   canvas.getActiveObjects().forEach((object) => {
-    //     canvas.sendObjectBackwards(object);
-    //     canvas.renderAll();
-    //     // TODO: get the image instead of the workspace
-    //     // const workspace = getWorkSpace();
-    //     // canvas.sendObjectToBack(workspace!);
-    //   });
-    // },
-    // changeFillColor: (value: string) => {
-    //   setFillColor(value);
-    //   canvas.getActiveObjects().forEach((object) => {
-    //     object.set({ fill: value });
-    //   });
+    changeFillColor: (value: string) => {
+      setFillColor(value);
+      canvas.getActiveObjects().forEach((object) => {
+        object.set({ fill: value });
+      });
 
-    //   canvas.renderAll();
-    // },
+      canvas.renderAll();
+    },
+    getActiveFillColor: () => {
+      const selectedObject = selectedObjects[0];
+
+      if (!selectedObject) {
+        return fillColor;
+      }
+
+      const value = selectedObject.get("fill") || fillColor;
+      // Currently, Gradients and patterns are not supported
+      return value as string;
+    },
   };
 };
 
@@ -181,6 +132,7 @@ export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
   const [selectedObjects, setSelectedObjects] = useState<fabric.FabricObject[]>(
     [],
   );
+  const [fillColor, setFillColor] = useState<string>(FILL_COLOR);
 
   const { save, canUndo, canRedo, undo, redo, canvasHistory, setHistoryIndex } =
     useHistory({ canvas });
@@ -197,11 +149,23 @@ export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
         canRedo,
         undo,
         redo,
+        fillColor,
+        setFillColor,
       });
     }
 
     return undefined;
-  }, [canvas, selectedObjects, save, canUndo, canRedo, undo, redo]);
+  }, [
+    canvas,
+    selectedObjects,
+    save,
+    canUndo,
+    canRedo,
+    undo,
+    redo,
+    fillColor,
+    setFillColor,
+  ]);
 
   const init = useCallback(
     ({

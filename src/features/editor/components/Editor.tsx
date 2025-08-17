@@ -11,6 +11,7 @@ import { TActiveTool } from "../types/editor";
 import { useEditor } from "../hooks/useEditor";
 import { SELECTION_DEPENDENT_TOOLS } from "../constants/tools";
 import OpacitySidebar from "./OpacitySidebar";
+import FillColorSidebar from "./FillColorSidebar";
 
 const Editor: FC = () => {
   const [activeTool, setActiveTool] = useState<TActiveTool>("image");
@@ -76,6 +77,11 @@ const Editor: FC = () => {
           onChangeActiveTool={handleChangeActiveTool}
         />
         <OpacitySidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={handleChangeActiveTool}
+        />
+        <FillColorSidebar
           editor={editor}
           activeTool={activeTool}
           onChangeActiveTool={handleChangeActiveTool}

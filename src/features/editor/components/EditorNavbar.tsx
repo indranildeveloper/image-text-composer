@@ -35,8 +35,6 @@ const EditorNavbar: FC<EditorNavbarProps> = ({
   activeTool,
   onChangeActiveTool,
 }) => {
-  console.log(activeTool);
-
   return (
     <nav className="flex h-[70px] items-center justify-between border-b px-8">
       <div className="flex items-center">
