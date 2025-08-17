@@ -4,6 +4,7 @@ import { Editor } from "../types/editor";
 import { ITextboxOptions } from "fabric/fabric-impl";
 import {
   FILL_COLOR,
+  FONT_FAMILY,
   FONT_LINE_THROUGH,
   FONT_SIZE,
   FONT_STYLE,
@@ -37,6 +38,8 @@ interface BuildEditorProps {
   setFillColor: (value: string) => void;
   copy: () => void;
   paste: () => void;
+  fontFamily: string;
+  setFontFamily: (value: string) => void;
 }
 
 const buildEditor = ({
@@ -49,6 +52,8 @@ const buildEditor = ({
   redo,
   fillColor,
   setFillColor,
+  fontFamily,
+  setFontFamily,
   copy,
   paste,
 }: BuildEditorProps): Editor => {
@@ -278,6 +283,26 @@ const buildEditor = ({
       const value = selectedObject.get("fontSize") || FONT_SIZE;
       return value as number;
     },
+    changeFontFamily: (value: string) => {
+      setFontFamily(value);
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextType(object.type)) {
+          object.set({ fontFamily: value });
+        }
+      });
+
+      canvas.renderAll();
+    },
+    getActiveFontFamily: () => {
+      const selectedObject = selectedObjects[0];
+
+      if (!selectedObject) {
+        return fontFamily;
+      }
+
+      const value = selectedObject.get("fontFamily") || fontFamily;
+      return value as string;
+    },
     bringForward: () => {
       canvas.getActiveObjects().forEach((object) => {
         canvas.bringObjectForward(object);
@@ -306,6 +331,7 @@ export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
     [],
   );
   const [fillColor, setFillColor] = useState<string>(FILL_COLOR);
+  const [fontFamily, setFontFamily] = useState<string>(FONT_FAMILY);
 
   const { save, canUndo, canRedo, undo, redo, canvasHistory, setHistoryIndex } =
     useHistory({ canvas });
@@ -337,6 +363,8 @@ export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
         redo,
         fillColor,
         setFillColor,
+        fontFamily,
+        setFontFamily,
         copy,
         paste,
       });
@@ -355,6 +383,8 @@ export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
     setFillColor,
     copy,
     paste,
+    fontFamily,
+    setFontFamily,
   ]);
 
   const init = useCallback(

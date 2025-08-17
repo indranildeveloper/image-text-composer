@@ -12,6 +12,7 @@ import { useEditor } from "../hooks/useEditor";
 import { SELECTION_DEPENDENT_TOOLS } from "../constants/tools";
 import OpacitySidebar from "./OpacitySidebar";
 import FillColorSidebar from "./FillColorSidebar";
+import FontFamilySidebar from "./FontFamilySidebar";
 
 const Editor: FC = () => {
   const [activeTool, setActiveTool] = useState<TActiveTool>("image");
@@ -82,6 +83,11 @@ const Editor: FC = () => {
           onChangeActiveTool={handleChangeActiveTool}
         />
         <FillColorSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={handleChangeActiveTool}
+        />
+        <FontFamilySidebar
           editor={editor}
           activeTool={activeTool}
           onChangeActiveTool={handleChangeActiveTool}

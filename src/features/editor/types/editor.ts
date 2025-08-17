@@ -1,6 +1,12 @@
 import * as fabric from "fabric";
 import { ITextboxOptions } from "fabric/fabric-impl";
-export type TActiveTool = "image" | "text" | "select" | "opacity" | "fill";
+export type TActiveTool =
+  | "image"
+  | "text"
+  | "select"
+  | "opacity"
+  | "fill"
+  | "font";
 
 export interface Editor {
   canvas: fabric.Canvas;
@@ -32,4 +38,6 @@ export interface Editor {
   savePNG: () => void;
   copyObject: () => void;
   pasteObject: () => void;
+  changeFontFamily: (value: string) => void;
+  getActiveFontFamily: () => string;
 }

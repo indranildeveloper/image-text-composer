@@ -14,6 +14,7 @@ import {
   AlignRightIcon,
   ArrowDownIcon,
   ArrowUpIcon,
+  ChevronDownIcon,
   CopyIcon,
 } from "lucide-react";
 import FontSizeInput from "./FontSizeInput";
@@ -41,6 +42,7 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
   const initialFontLineThrough = editor?.getActiveFontLineThrough();
   const initialTextAlign = editor?.getActiveTextAlign() ?? TEXT_ALIGN;
   const initialFontSize = editor?.getActiveFontSize() ?? FONT_SIZE;
+  const initialFontFamily = editor?.getActiveFontFamily();
 
   const [properties, setProperties] = useState({
     fillColor: initialFillColor,
@@ -50,6 +52,7 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
     fontLineThrough: initialFontLineThrough,
     textAlign: initialTextAlign,
     fontSize: initialFontSize,
+    fontFamily: initialFontFamily,
   });
 
   const toggleBold = () => {
@@ -172,6 +175,23 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
                 className={cn(activeTool === "opacity" && "bg-slate-100")}
               >
                 <RxTransparencyGrid className="size-4" />
+              </Button>
+            </Hint>
+          </div>
+          <div className="flex h-full items-center justify-center">
+            <Hint label="Font Family" side="bottom">
+              <Button
+                onClick={() => onChangeActiveTool("font")}
+                variant="ghost"
+                className={cn(
+                  "w-auto",
+                  activeTool === "font" && "bg-slate-100",
+                )}
+              >
+                <div className="max-w-[100px] truncate">
+                  {properties.fontFamily}
+                </div>
+                <ChevronDownIcon className="ml-2 size-4 shrink-0" />
               </Button>
             </Hint>
           </div>
