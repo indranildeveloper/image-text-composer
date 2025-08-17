@@ -74,3 +74,4 @@ Here I have followed the best practices to make the code maintainable and easy t
 
 1. The application is not responsive yet. Responsiveness of the canvas can be added through `ResizeObserver` with a custom hook.
 2. The changes in the canvas are saved in the local storage. But we can optimize that by using a `debounced` save function.
+3. No tests for the code were written. We can write tests for the code using `jest` or `vitest` with `react-testing-library`.
