@@ -6,7 +6,9 @@ import { cn } from "@/lib/utils";
 import { RxTransparencyGrid } from "react-icons/rx";
 import { FaBold, FaItalic, FaStrikethrough, FaUnderline } from "react-icons/fa";
 import { isTextType } from "../utils/text";
-import { FONT_WEIGHT } from "../constants/editor";
+import { FONT_WEIGHT, TEXT_ALIGN } from "../constants/editor";
+import { ITextboxOptions } from "fabric/fabric-impl";
+import { AlignCenterIcon, AlignLeftIcon, AlignRightIcon } from "lucide-react";
 
 interface EditorToolbarProps {
   key: string;
@@ -29,6 +31,7 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
   const initialFontStyle = editor?.getActiveFontStyle();
   const initialFontUnderline = editor?.getActiveFontUnderline();
   const initialFontLineThrough = editor?.getActiveFontLineThrough();
+  const initialTextAlign = editor?.getActiveTextAlign() ?? TEXT_ALIGN;
 
   const [properties, setProperties] = useState({
     fillColor: initialFillColor,
@@ -36,6 +39,7 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
     fontStyle: initialFontStyle,
     fontUnderline: initialFontUnderline,
     fontLineThrough: initialFontLineThrough,
+    textAlign: initialTextAlign,
   });
 
   const toggleBold = () => {
@@ -84,6 +88,16 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
     setProperties((prevProperties) => ({
       ...prevProperties,
       fontLineThrough: newValue,
+    }));
+  };
+
+  const handleChangeTextAlign = (value: ITextboxOptions["textAlign"]) => {
+    if (!selectedObject) return;
+
+    editor?.changeTextAlign(value);
+    setProperties((prevProperties) => ({
+      ...prevProperties,
+      textAlign: value as string,
     }));
   };
 
@@ -167,6 +181,48 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
                 className={cn(properties.fontLineThrough && "bg-slate-100")}
               >
                 <FaStrikethrough className="size-4" />
+              </Button>
+            </Hint>
+          </div>
+          <div className="flex h-full items-center justify-center">
+            <Hint label="Align Left" side="bottom">
+              <Button
+                onClick={() => handleChangeTextAlign("left")}
+                size="icon"
+                variant="ghost"
+                className={cn(
+                  properties.textAlign === "left" && "bg-slate-100",
+                )}
+              >
+                <AlignLeftIcon className="size-4" />
+              </Button>
+            </Hint>
+          </div>
+          <div className="flex h-full items-center justify-center">
+            <Hint label="Align Center" side="bottom">
+              <Button
+                onClick={() => handleChangeTextAlign("center")}
+                size="icon"
+                variant="ghost"
+                className={cn(
+                  properties.textAlign === "center" && "bg-slate-100",
+                )}
+              >
+                <AlignCenterIcon className="size-4" />
+              </Button>
+            </Hint>
+          </div>
+          <div className="flex h-full items-center justify-center">
+            <Hint label="Align Right" side="bottom">
+              <Button
+                onClick={() => handleChangeTextAlign("right")}
+                size="icon"
+                variant="ghost"
+                className={cn(
+                  properties.textAlign === "right" && "bg-slate-100",
+                )}
+              >
+                <AlignRightIcon className="size-4" />
               </Button>
             </Hint>
           </div>

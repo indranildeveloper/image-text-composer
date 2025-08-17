@@ -23,4 +23,6 @@ export interface Editor {
   getActiveFontUnderline: () => boolean;
   changeFontLineThrough: (value: boolean) => void;
   getActiveFontLineThrough: () => boolean;
+  changeTextAlign: (value: ITextboxOptions["textAlign"]) => void;
+  getActiveTextAlign: () => ITextboxOptions["textAlign"];
 }

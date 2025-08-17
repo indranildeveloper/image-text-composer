@@ -8,6 +8,7 @@ import {
   FONT_STYLE,
   FONT_UNDERLINE,
   FONT_WEIGHT,
+  TEXT_ALIGN,
   TEXT_OPTIONS,
 } from "../constants/editor";
 import { useHistory } from "./useHistory";
@@ -201,6 +202,24 @@ const buildEditor = ({
 
       const value = selectedObject.get("linethrough") || FONT_LINE_THROUGH;
       return value as boolean;
+    },
+    changeTextAlign: (value: ITextboxOptions["textAlign"]) => {
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextType(object.type)) {
+          object.set({ textAlign: value });
+        }
+      });
+      canvas.renderAll();
+    },
+    getActiveTextAlign: () => {
+      const selectedObject = selectedObjects[0];
+
+      if (!selectedObject) {
+        return TEXT_ALIGN;
+      }
+
+      const value = selectedObject.get("textAlign") || TEXT_ALIGN;
+      return value as ITextboxOptions["textAlign"];
     },
   };
 };
