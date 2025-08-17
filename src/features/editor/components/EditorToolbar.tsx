@@ -4,7 +4,7 @@ import Hint from "./Hint";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { RxTransparencyGrid } from "react-icons/rx";
-import { FaBold } from "react-icons/fa";
+import { FaBold, FaItalic } from "react-icons/fa";
 import { isTextType } from "../utils/text";
 import { FONT_WEIGHT } from "../constants/editor";
 
@@ -26,10 +26,12 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
 
   const initialFillColor = editor?.getActiveFillColor();
   const initialFontWeight = editor?.getActiveFontWeight() ?? FONT_WEIGHT;
+  const initialFontStyle = editor?.getActiveFontStyle();
 
   const [properties, setProperties] = useState({
     fillColor: initialFillColor,
     fontWeight: initialFontWeight,
+    fontStyle: initialFontStyle,
   });
 
   const toggleBold = () => {
@@ -41,6 +43,19 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
     setProperties((prevProperties) => ({
       ...prevProperties,
       fontWeight: newValue,
+    }));
+  };
+
+  const toggleItalic = () => {
+    if (!selectedObject) return;
+
+    const isItalic = properties.fontStyle === "italic";
+    const newValue = isItalic ? "normal" : "italic";
+
+    editor?.changeFontStyle(newValue);
+    setProperties((prevProperties) => ({
+      ...prevProperties,
+      fontStyle: newValue,
     }));
   };
 
@@ -86,6 +101,20 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
                 className={cn(properties.fontWeight > 500 && "bg-slate-100")}
               >
                 <FaBold className="size-4" />
+              </Button>
+            </Hint>
+          </div>
+          <div className="flex h-full items-center justify-center">
+            <Hint label="Italic" side="bottom">
+              <Button
+                onClick={toggleItalic}
+                size="icon"
+                variant="ghost"
+                className={cn(
+                  properties.fontStyle === "italic" && "bg-slate-100",
+                )}
+              >
+                <FaItalic className="size-4" />
               </Button>
             </Hint>
           </div>

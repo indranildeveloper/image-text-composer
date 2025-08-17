@@ -17,4 +17,6 @@ export interface Editor {
   getActiveFillColor: () => string;
   changeFontWeight: (value: number) => void;
   getActiveFontWeight: () => number;
+  changeFontStyle: (value: string) => void;
+  getActiveFontStyle: () => string;
 }

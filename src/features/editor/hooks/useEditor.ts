@@ -2,7 +2,12 @@ import { useCallback, useMemo, useState } from "react";
 import * as fabric from "fabric";
 import { Editor } from "../types/editor";
 import { ITextboxOptions } from "fabric/fabric-impl";
-import { FILL_COLOR, FONT_WEIGHT, TEXT_OPTIONS } from "../constants/editor";
+import {
+  FILL_COLOR,
+  FONT_STYLE,
+  FONT_WEIGHT,
+  TEXT_OPTIONS,
+} from "../constants/editor";
 import { useHistory } from "./useHistory";
 import { JSON_KEYS } from "../constants/history";
 import { useCanvasEvents } from "./useCanvasEvents";
@@ -140,6 +145,24 @@ const buildEditor = ({
 
       const value = selectedObject.get("fontWeight") || FONT_WEIGHT;
       return value as number;
+    },
+    changeFontStyle: (value: string) => {
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextType(object.type)) {
+          object.set({ fontStyle: value });
+        }
+      });
+      canvas.renderAll();
+    },
+    getActiveFontStyle: () => {
+      const selectedObject = selectedObjects[0];
+
+      if (!selectedObject) {
+        return FONT_STYLE;
+      }
+
+      const value = selectedObject.get("fontStyle") || FONT_STYLE;
+      return value as string;
     },
   };
 };
