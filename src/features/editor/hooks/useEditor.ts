@@ -16,6 +16,7 @@ import { useHistory } from "./useHistory";
 import { JSON_KEYS } from "../constants/history";
 import { useCanvasEvents } from "./useCanvasEvents";
 import { isTextType } from "../utils/text";
+import { downloadFile } from "../utils/download";
 
 interface UseEditorProps {
   clearSelectionCallback?: () => void;
@@ -44,9 +45,35 @@ const buildEditor = ({
   fillColor,
   setFillColor,
 }: BuildEditorProps): Editor => {
+  const getWorkSpace = () => {
+    return (
+      canvas
+        .getObjects()
+        // @ts-expect-error name is assigned
+        .find((object) => object.name === "image")
+    );
+  };
+
   const addToCanvas = (object: fabric.FabricObject) => {
     canvas.add(object);
     canvas.setActiveObject(object);
+  };
+
+  const generateSaveOptions = () => {
+    return {
+      name: "Image",
+      format: "png" as fabric.ImageFormat,
+      quality: 1,
+      multiplier: 1,
+    };
+  };
+
+  const savePNG = () => {
+    const options = generateSaveOptions();
+    canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
+    const dataUrl = canvas.toDataURL(options);
+
+    downloadFile(dataUrl, "png");
   };
 
   return {
@@ -56,6 +83,7 @@ const buildEditor = ({
     handleRedo: () => redo(),
     canUndo: () => canUndo(),
     canRedo: () => canRedo(),
+    savePNG: () => savePNG(),
     addImage: (value: string) => {
       fabric.FabricImage.fromURL(value, { crossOrigin: "anonymous" })
         .then((image) => {
@@ -80,6 +108,7 @@ const buildEditor = ({
             top: (canvasHeight - originalHeight * scale) / 2,
             selectable: false,
             hasControls: false,
+            name: "image",
           });
           addToCanvas(image);
         })
@@ -244,18 +273,18 @@ const buildEditor = ({
       canvas.getActiveObjects().forEach((object) => {
         canvas.bringObjectForward(object);
         canvas.renderAll();
-        // TODO: get the image as workspace
-        // const workspace = getWorkSpace();
-        // canvas.sendObjectToBack(workspace!);
+
+        const workspace = getWorkSpace();
+        canvas.sendObjectToBack(workspace!);
       });
     },
     sendBackward: () => {
       canvas.getActiveObjects().forEach((object) => {
         canvas.sendObjectBackwards(object);
         canvas.renderAll();
-        // TODO: get the image as workspace
-        // const workspace = getWorkSpace();
-        // canvas.sendObjectToBack(workspace!);
+
+        const workspace = getWorkSpace();
+        canvas.sendObjectToBack(workspace!);
       });
     },
   };

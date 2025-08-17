@@ -29,4 +29,5 @@ export interface Editor {
   getActiveFontSize: () => number;
   bringForward: () => void;
   sendBackward: () => void;
+  savePNG: () => void;
 }

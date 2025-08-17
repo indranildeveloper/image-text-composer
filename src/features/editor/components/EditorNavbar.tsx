@@ -85,11 +85,7 @@ const EditorNavbar: FC<EditorNavbarProps> = ({
           <DropdownMenuContent className="mr-8">
             <DropdownMenuLabel>Export Image</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={() => {
-                console.log("Download to PNG");
-              }}
-            >
+            <DropdownMenuItem onClick={() => editor?.savePNG()}>
               <ImageIcon />
               <span>Download to PNG</span>
             </DropdownMenuItem>
