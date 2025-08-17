@@ -240,6 +240,24 @@ const buildEditor = ({
       const value = selectedObject.get("fontSize") || FONT_SIZE;
       return value as number;
     },
+    bringForward: () => {
+      canvas.getActiveObjects().forEach((object) => {
+        canvas.bringObjectForward(object);
+        canvas.renderAll();
+        // TODO: get the image as workspace
+        // const workspace = getWorkSpace();
+        // canvas.sendObjectToBack(workspace!);
+      });
+    },
+    sendBackward: () => {
+      canvas.getActiveObjects().forEach((object) => {
+        canvas.sendObjectBackwards(object);
+        canvas.renderAll();
+        // TODO: get the image as workspace
+        // const workspace = getWorkSpace();
+        // canvas.sendObjectToBack(workspace!);
+      });
+    },
   };
 };
 

@@ -27,4 +27,6 @@ export interface Editor {
   getActiveTextAlign: () => ITextboxOptions["textAlign"];
   changeFontSize: (value: number) => void;
   getActiveFontSize: () => number;
+  bringForward: () => void;
+  sendBackward: () => void;
 }

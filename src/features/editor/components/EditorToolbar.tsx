@@ -8,7 +8,13 @@ import { FaBold, FaItalic, FaStrikethrough, FaUnderline } from "react-icons/fa";
 import { isTextType } from "../utils/text";
 import { FONT_SIZE, FONT_WEIGHT, TEXT_ALIGN } from "../constants/editor";
 import { ITextboxOptions } from "fabric/fabric-impl";
-import { AlignCenterIcon, AlignLeftIcon, AlignRightIcon } from "lucide-react";
+import {
+  AlignCenterIcon,
+  AlignLeftIcon,
+  AlignRightIcon,
+  ArrowDownIcon,
+  ArrowUpIcon,
+} from "lucide-react";
 import FontSizeInput from "./FontSizeInput";
 
 interface EditorToolbarProps {
@@ -117,15 +123,25 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
     <div className="h-[50px] w-full border-b">
       {isTextSelected && (
         <div className="flex h-full items-center gap-2 px-2">
-          <div className="flex h-full items-center">
-            <Hint label="Opacity" side="bottom">
+          <div className="flex h-full items-center justify-center">
+            <Hint label="Bring Forward" side="bottom">
               <Button
-                onClick={() => onChangeActiveTool("opacity")}
+                onClick={() => editor?.bringForward()}
                 size="icon"
                 variant="ghost"
-                className={cn(activeTool === "opacity" && "bg-slate-100")}
               >
-                <RxTransparencyGrid className="size-4" />
+                <ArrowUpIcon className="size-4" />
+              </Button>
+            </Hint>
+          </div>
+          <div className="flex h-full items-center justify-center">
+            <Hint label="Send Backward" side="bottom">
+              <Button
+                onClick={() => editor?.sendBackward()}
+                size="icon"
+                variant="ghost"
+              >
+                <ArrowDownIcon className="size-4" />
               </Button>
             </Hint>
           </div>
@@ -143,6 +159,18 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
                     backgroundColor: properties.fillColor,
                   }}
                 />
+              </Button>
+            </Hint>
+          </div>
+          <div className="flex h-full items-center">
+            <Hint label="Opacity" side="bottom">
+              <Button
+                onClick={() => onChangeActiveTool("opacity")}
+                size="icon"
+                variant="ghost"
+                className={cn(activeTool === "opacity" && "bg-slate-100")}
+              >
+                <RxTransparencyGrid className="size-4" />
               </Button>
             </Hint>
           </div>
