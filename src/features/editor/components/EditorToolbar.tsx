@@ -6,9 +6,10 @@ import { cn } from "@/lib/utils";
 import { RxTransparencyGrid } from "react-icons/rx";
 import { FaBold, FaItalic, FaStrikethrough, FaUnderline } from "react-icons/fa";
 import { isTextType } from "../utils/text";
-import { FONT_WEIGHT, TEXT_ALIGN } from "../constants/editor";
+import { FONT_SIZE, FONT_WEIGHT, TEXT_ALIGN } from "../constants/editor";
 import { ITextboxOptions } from "fabric/fabric-impl";
 import { AlignCenterIcon, AlignLeftIcon, AlignRightIcon } from "lucide-react";
+import FontSizeInput from "./FontSizeInput";
 
 interface EditorToolbarProps {
   key: string;
@@ -32,6 +33,7 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
   const initialFontUnderline = editor?.getActiveFontUnderline();
   const initialFontLineThrough = editor?.getActiveFontLineThrough();
   const initialTextAlign = editor?.getActiveTextAlign() ?? TEXT_ALIGN;
+  const initialFontSize = editor?.getActiveFontSize() ?? FONT_SIZE;
 
   const [properties, setProperties] = useState({
     fillColor: initialFillColor,
@@ -40,6 +42,7 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
     fontUnderline: initialFontUnderline,
     fontLineThrough: initialFontLineThrough,
     textAlign: initialTextAlign,
+    fontSize: initialFontSize,
   });
 
   const toggleBold = () => {
@@ -98,6 +101,15 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
     setProperties((prevProperties) => ({
       ...prevProperties,
       textAlign: value as string,
+    }));
+  };
+
+  const handleChangeFontSize = (value: number) => {
+    if (!selectedObject) return;
+    editor.changeFontSize(value);
+    setProperties((prevProperties) => ({
+      ...prevProperties,
+      fontSize: value,
     }));
   };
 
@@ -225,6 +237,12 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
                 <AlignRightIcon className="size-4" />
               </Button>
             </Hint>
+          </div>
+          <div className="flex h-full items-center justify-center">
+            <FontSizeInput
+              value={properties.fontSize}
+              onChange={handleChangeFontSize}
+            />
           </div>
         </div>
       )}
