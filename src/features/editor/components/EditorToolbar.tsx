@@ -4,7 +4,9 @@ import Hint from "./Hint";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { RxTransparencyGrid } from "react-icons/rx";
+import { FaBold } from "react-icons/fa";
 import { isTextType } from "../utils/text";
+import { FONT_WEIGHT } from "../constants/editor";
 
 interface EditorToolbarProps {
   key: string;
@@ -19,13 +21,28 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
   onChangeActiveTool,
 }) => {
   const selectedObjectType = editor?.selectedObjects[0]?.type;
+  const selectedObject = editor?.selectedObjects[0];
   const isTextSelected = isTextType(selectedObjectType);
 
   const initialFillColor = editor?.getActiveFillColor();
+  const initialFontWeight = editor?.getActiveFontWeight() ?? FONT_WEIGHT;
 
   const [properties, setProperties] = useState({
     fillColor: initialFillColor,
+    fontWeight: initialFontWeight,
   });
+
+  const toggleBold = () => {
+    if (!selectedObject) return;
+
+    const newValue = properties.fontWeight > 500 ? 500 : 700;
+
+    editor?.changeFontWeight(newValue);
+    setProperties((prevProperties) => ({
+      ...prevProperties,
+      fontWeight: newValue,
+    }));
+  };
 
   return (
     <div className="h-[50px] w-full border-b">
@@ -57,6 +74,18 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
                     backgroundColor: properties.fillColor,
                   }}
                 />
+              </Button>
+            </Hint>
+          </div>
+          <div className="flex h-full items-center justify-center">
+            <Hint label="Bold" side="bottom">
+              <Button
+                onClick={toggleBold}
+                size="icon"
+                variant="ghost"
+                className={cn(properties.fontWeight > 500 && "bg-slate-100")}
+              >
+                <FaBold className="size-4" />
               </Button>
             </Hint>
           </div>

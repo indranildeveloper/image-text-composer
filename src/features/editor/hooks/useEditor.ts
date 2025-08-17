@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from "react";
 import * as fabric from "fabric";
 import { Editor } from "../types/editor";
 import { ITextboxOptions } from "fabric/fabric-impl";
-import { FILL_COLOR, TEXT_OPTIONS } from "../constants/editor";
+import { FILL_COLOR, FONT_WEIGHT, TEXT_OPTIONS } from "../constants/editor";
 import { useHistory } from "./useHistory";
 import { JSON_KEYS } from "../constants/history";
 import { useCanvasEvents } from "./useCanvasEvents";
@@ -122,6 +122,24 @@ const buildEditor = ({
       const value = selectedObject.get("fill") || fillColor;
       // Currently, Gradients and patterns are not supported
       return value as string;
+    },
+    changeFontWeight: (value: number) => {
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextType(object.type)) {
+          object.set({ fontWeight: value });
+        }
+      });
+      canvas.renderAll();
+    },
+    getActiveFontWeight: () => {
+      const selectedObject = selectedObjects[0];
+
+      if (!selectedObject) {
+        return FONT_WEIGHT;
+      }
+
+      const value = selectedObject.get("fontWeight") || FONT_WEIGHT;
+      return value as number;
     },
   };
 };
