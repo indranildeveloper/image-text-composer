@@ -19,4 +19,6 @@ export interface Editor {
   getActiveFontWeight: () => number;
   changeFontStyle: (value: string) => void;
   getActiveFontStyle: () => string;
+  changeFontUnderline: (value: boolean) => void;
+  getActiveFontUnderline: () => boolean;
 }

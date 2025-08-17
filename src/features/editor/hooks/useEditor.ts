@@ -5,6 +5,7 @@ import { ITextboxOptions } from "fabric/fabric-impl";
 import {
   FILL_COLOR,
   FONT_STYLE,
+  FONT_UNDERLINE,
   FONT_WEIGHT,
   TEXT_OPTIONS,
 } from "../constants/editor";
@@ -163,6 +164,24 @@ const buildEditor = ({
 
       const value = selectedObject.get("fontStyle") || FONT_STYLE;
       return value as string;
+    },
+    changeFontUnderline: (value: boolean) => {
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextType(object.type)) {
+          object.set({ underline: value });
+        }
+      });
+      canvas.renderAll();
+    },
+    getActiveFontUnderline: () => {
+      const selectedObject = selectedObjects[0];
+
+      if (!selectedObject) {
+        return FONT_UNDERLINE;
+      }
+
+      const value = selectedObject.get("underline") || FONT_UNDERLINE;
+      return value as boolean;
     },
   };
 };

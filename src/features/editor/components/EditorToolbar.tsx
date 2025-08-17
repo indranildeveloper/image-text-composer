@@ -4,7 +4,7 @@ import Hint from "./Hint";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { RxTransparencyGrid } from "react-icons/rx";
-import { FaBold, FaItalic } from "react-icons/fa";
+import { FaBold, FaItalic, FaUnderline } from "react-icons/fa";
 import { isTextType } from "../utils/text";
 import { FONT_WEIGHT } from "../constants/editor";
 
@@ -27,11 +27,13 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
   const initialFillColor = editor?.getActiveFillColor();
   const initialFontWeight = editor?.getActiveFontWeight() ?? FONT_WEIGHT;
   const initialFontStyle = editor?.getActiveFontStyle();
+  const initialFontUnderline = editor?.getActiveFontUnderline();
 
   const [properties, setProperties] = useState({
     fillColor: initialFillColor,
     fontWeight: initialFontWeight,
     fontStyle: initialFontStyle,
+    fontUnderline: initialFontUnderline,
   });
 
   const toggleBold = () => {
@@ -56,6 +58,18 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
     setProperties((prevProperties) => ({
       ...prevProperties,
       fontStyle: newValue,
+    }));
+  };
+
+  const toggleUnderline = () => {
+    if (!selectedObject) return;
+
+    const newValue = properties.fontUnderline ? false : true;
+
+    editor?.changeFontUnderline(newValue);
+    setProperties((prevProperties) => ({
+      ...prevProperties,
+      fontUnderline: newValue,
     }));
   };
 
@@ -115,6 +129,18 @@ const EditorToolbar: FC<EditorToolbarProps> = ({
                 )}
               >
                 <FaItalic className="size-4" />
+              </Button>
+            </Hint>
+          </div>
+          <div className="flex h-full items-center justify-center">
+            <Hint label="Underline" side="bottom">
+              <Button
+                onClick={toggleUnderline}
+                size="icon"
+                variant="ghost"
+                className={cn(properties.fontUnderline && "bg-slate-100")}
+              >
+                <FaUnderline className="size-4" />
               </Button>
             </Hint>
           </div>
