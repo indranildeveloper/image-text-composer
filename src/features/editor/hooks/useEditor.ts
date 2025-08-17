@@ -72,19 +72,78 @@ const buildEditor = ({
     canvas.setActiveObject(object);
   };
 
-  const generateSaveOptions = () => {
+  function getBoundingRectangle(canvas: fabric.Canvas) {
+    let minX = Infinity,
+      minY = Infinity,
+      maxX = -Infinity,
+      maxY = -Infinity;
+    canvas.getObjects().forEach((obj) => {
+      obj.setCoords();
+      const rect = obj.getBoundingRect();
+      minX = Math.min(minX, rect.left);
+      minY = Math.min(minY, rect.top);
+      maxX = Math.max(maxX, rect.left + rect.width);
+      maxY = Math.max(maxY, rect.top + rect.height);
+    });
     return {
-      name: "Image",
-      format: "png" as fabric.ImageFormat,
-      quality: 1,
-      multiplier: 1,
+      left: minX,
+      top: minY,
+      width: maxX - minX,
+      height: maxY - minY,
     };
-  };
+  }
 
   const savePNG = () => {
-    const options = generateSaveOptions();
-    canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
-    const dataUrl = canvas.toDataURL(options);
+    const workspace = getWorkSpace() as fabric.FabricImage;
+    const outputWidth = workspace.width;
+    const outputHeight = workspace.height;
+
+    // Calculate bounding box of all objects
+    const bounding = getBoundingRectangle(canvas);
+
+    // Scale to cover entire output (may stretch if aspect ratios differ)
+    const scaleX = outputWidth / bounding.width;
+    const scaleY = outputHeight / bounding.height;
+    const scale = Math.max(scaleX, scaleY); // Use max for cover
+
+    // Center the objects in the output image
+    const offsetX =
+      (outputWidth - bounding.width * scale) / 2 - bounding.left * scale;
+    const offsetY =
+      (outputHeight - bounding.height * scale) / 2 - bounding.top * scale;
+
+    const prevTransform = canvas.viewportTransform
+      ? canvas.viewportTransform.slice()
+      : [1, 0, 0, 1, 0, 0];
+    const prevWidth = canvas.width;
+    const prevHeight = canvas.height;
+
+    // Set viewport and size to fit/crop
+    canvas.setViewportTransform([scale, 0, 0, scale, offsetX, offsetY]);
+    canvas.setDimensions({
+      width: outputWidth,
+      height: outputHeight,
+    });
+
+    canvas.requestRenderAll();
+
+    const dataUrl = canvas.toDataURL({
+      format: "png",
+      left: 0,
+      top: 0,
+      width: outputWidth,
+      height: outputHeight,
+      multiplier: 1,
+      quality: 1,
+    });
+
+    // Restore canvas state
+    canvas.setViewportTransform(prevTransform as fabric.TMat2D);
+    canvas.setDimensions({
+      width: prevWidth,
+      height: prevHeight,
+    });
+    canvas.requestRenderAll();
 
     downloadFile(dataUrl, "png");
   };
@@ -110,6 +169,7 @@ const buildEditor = ({
     savePNG: () => savePNG(),
     copyObject: () => copy(),
     pasteObject: () => paste(),
+    loadJSON: (json: string) => loadJSON(json),
     resetEditor: () => {
       canvas
         ?.loadFromJSON(JSON.parse(DEFAULT_EDITOR_STATE) as string)
@@ -123,7 +183,6 @@ const buildEditor = ({
           );
         });
     },
-    loadJSON: (json: string) => loadJSON(json),
     addImage: (value: string) => {
       fabric.FabricImage.fromURL(value, { crossOrigin: "anonymous" })
         .then((image) => {

@@ -2,6 +2,7 @@ import { FC, useCallback, useState } from "react";
 import ToolSidebarHeader from "./ToolSidebarHeader";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 import { useDropzone } from "react-dropzone";
 import { FileUpIcon } from "lucide-react";
 import {
@@ -16,7 +17,6 @@ import {
 } from "@/components/ui/dialog";
 import { Editor, TActiveTool } from "../types/editor";
 import ToolSidebarClose from "./ToolSidebarClose";
-import { toast } from "sonner";
 
 export interface ImageSidebarProps {
   editor: Editor | undefined;
@@ -48,6 +48,7 @@ const ImageSidebar: FC<ImageSidebarProps> = ({
       editor?.addImage(dataUrl);
     };
     reader.readAsDataURL(uploadedFile!);
+    toast.success("Image uploaded successfully!");
   };
 
   const handleCloseToolSidebar = () => {

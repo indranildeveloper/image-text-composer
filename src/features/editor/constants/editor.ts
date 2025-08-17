@@ -9,8 +9,8 @@ export const TEXT_ALIGN = "left";
 export const DEFAULT_EDITOR_STATE = `{"version":"6.7.1","objects":[]}`;
 
 export const TEXT_OPTIONS = {
-  left: 100,
-  top: 100,
+  left: 400,
+  top: 400,
   fill: FILL_COLOR,
   fontSize: FONT_SIZE,
   fontFamily: FONT_FAMILY,
