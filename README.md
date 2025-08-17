@@ -21,25 +21,31 @@ Before running this application locally, you need to have [Node.js](https://node
    cd image-text-composer
    ```
 
-3. Install dependencies:
+3. Copy the `.env.example` file and rename that to `.env.local`. Then add the environment variable for the Google Fonts API key:
+
+   ```bash
+   NEXT_PUBLIC_GOOGLE_FONTS_API_KEY=<NEXT_PUBLIC_GOOGLE_FONTS_API_KEY>
+   ```
+
+4. Install dependencies:
 
    ```bash
    yarn install
    ```
 
-4. Start the development server:
+5. Start the development server:
 
    ```bash
    yarn dev
    ```
 
-5. Build the production version:
+6. Build the production version:
 
    ```bash
     yarn build
    ```
 
-6. Start the production server:
+7. Start the production server:
 
    ```bash
    yarn start
@@ -58,11 +64,11 @@ Here I have followed the best practices to make the code maintainable and easy t
 3. `Fabric.js` for creating and manipulating images and text elements.
 4. `Tailwind CSS` for styling the application.
 5. `Shadcn UI` as the `Tailwind UI Library`.
-6. `react-colors` for color picker.
-7. `react-use` for custom hooks.
-8. `lucide-react` and `react-icon` for icons.
-9. `eslint` and `prettier` for linting and formatting the code.
-10. `husky` for git hooks.
+6. `react-dropzone` for drag and drop file upload functionality.
+7. `react-colors` for color picker.
+8. `react-use` for custom hooks.
+9. `lucide-react` and `react-icon` for icons.
+10. `eslint` and `prettier` for linting and formatting the code, and `husky` for git hooks.
 
 ## Bonus points implemented:
 
