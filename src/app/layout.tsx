@@ -19,6 +19,9 @@ const firaCode = Fira_Code({
 export const metadata: Metadata = {
   title: "Image Text Composer",
   description: "Edit Images and add text to images.",
+  icons: {
+    icon: "/logo.svg",
+  },
 };
 
 const RootLayout: FC<Readonly<RootLayoutProps>> = ({ children }) => {

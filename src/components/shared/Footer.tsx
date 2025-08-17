@@ -7,6 +7,7 @@ const Footer: FC = () => {
         Made with 💙 by &nbsp;
         <a
           href="https://indranilhalder.in"
+          target="_blank"
           className="text-primary hover:underline"
         >
           Indranil Halder
